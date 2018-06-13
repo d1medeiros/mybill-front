@@ -1,0 +1,40 @@
+curl -v -d '{"nome":"seguro","valor":0,"dataPagamento":"2017-12-31","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+
+-------
+
+curl -v -d '{"nome":"seguro","valor":0,"dataPagamento":"2017-12-31","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+
+-------
+
+curl -v -d '{"nome":"seguro","valor":0,"dataPagamento":"2018-01-20","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+
+-------
+
+curl -v -d '{"id":"36","nome":"seguro","valor":110,"dataPagamento":"2018-01-20","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/altera
+
+-------
+
+curl -v -d '{"nome":"seguro","valor":1110,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"seguro","valor":1110,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/remove/todos/51
+
+-------
+
+curl -v -d '{"nome":"seguro","valor":1110,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"vivo","valor":210,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"carro","valor":910,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"vaga","valor":60,"dataPagamento":"2018-01-20","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"lanche","valor":92,"dataPagamento":"2018-01-20","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"luz","valor":292,"dataPagamento":"2018-01-20","estado":false,"repetir":false,"tipoConta":"GASTOS"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+curl -v -d '{"nome":"salario","valor":4910,"dataPagamento":"2018-01-20","estado":false,"repetir":true,"tipoConta":"GANHO"}' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/conta/salva
+clear
+
+-------
+
+curl -v -d '{"nome":"diego medeiros", "login":"diego", "senha":"12345", "estado":false }' -H "Content-Type: application/json" -X POST http://localhost:8080/meuorcamento/api/usuario/gerar
+curl -v -d '{"nome":"diego medeiros", "login":"diego", "senha":"12345" }' -H "Content-Type: application/json" -X PUT http://localhost:8080/meuorcamento/api/usuario/login
+clear
+
+
+curl -v -H "Content-Type: application/json" "http://localhost:8080/meuorcamento/api/usuario/verificar?XTOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNjI3OTA5QTI5QzMxMzgxQTA3MUVDMjdGN0M5Q0E5NzcyNjE4MkFFRDI5QTdEREQyRTU0MzUzMzIyQ0ZCMzBBQkI5RTNBNkRGMkFDMkMyMEZFMjM0MzYzMTFENjc4NTY0RDBDOEQzMDU5MzA1NzVGNjBFMkQzRDA0ODE4NEQ3OSIsIm5vbWUiOiJkaWVnbyBtZWRlaXJvcyJ9.-gC5ZrSxJL17uEvbVfTpkzHS4YxAh36QucgmTvoaOu4"
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzNjI3OTA5QTI5QzMxMzgxQTA3MUVDMjdGN0M5Q0E5NzcyNjE4MkFFRDI5QTdEREQyRTU0MzUzMzIyQ0ZCMzBBQkI5RTNBNkRGMkFDMkMyMEZFMjM0MzYzMTFENjc4NTY0RDBDOEQzMDU5MzA1NzVGNjBFMkQzRDA0ODE4NEQ3OSIsImxvZ2luIjoiZGllZ28iLCJleHAiOjE1MTgzNTU4OTV9.b_fmnD2OGo3Hv5uyQsCiWdmV7ZjA4bqIpdlNPe5rfD0
