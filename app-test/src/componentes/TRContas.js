@@ -53,6 +53,8 @@ export default class TRContas extends Component{
     }
 
     render(){
+        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
         return(
                 <div>
 
@@ -62,7 +64,7 @@ export default class TRContas extends Component{
                     <table className="pure-table">
                         <thead>
                             <tr className="header-table-name">
-                                <th colSpan="3" id="">{this.props.mes}</th>
+                                <th colSpan="3" id="">{monthNames[this.props.mes] + ' - ' + this.props.ano}</th>
                                 
                             </tr>
                             <tr>

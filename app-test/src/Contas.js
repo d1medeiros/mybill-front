@@ -2,7 +2,6 @@ import React,{Component} from 'react';
 import {Link} from 'react-router';
 import FaPlus from 'react-icons/lib/fa/plus';
 import TRContas from './componentes/TRContas';
-import Verificar from './util/Verificar';
 import PubSub from 'pubsub-js';
 
 class Contas extends Component{
@@ -10,6 +9,7 @@ class Contas extends Component{
     constructor(props){
         super(props);
         this.state = {
+            lista: [], 
             listaGastos: [], 
             listaGanho: [], 
             totalGastos: 0, 
@@ -23,13 +23,13 @@ class Contas extends Component{
         };
         this.getNextContasPorMes = this.getNextContasPorMes.bind(this);
         this.getPrevContasPorMes = this.getPrevContasPorMes.bind(this);
+        this.maxMes = 11;
+        this.minMes = 0;
         // console.log("construtor");
     }
 
     componentDidMount(){  
         // console.log("didMount");
-
-        // new Verificar().verifica();
 
         const url = 'http://localhost:8080/paid';
         const req = {
@@ -90,140 +90,103 @@ class Contas extends Component{
 
     }
 
-    componentWillMount(){
-        // console.log("willMount");
-    }   
-    
-    componentWillUnmount(){}
+    parseDateFromAPI(date){
+        return new Date(date.split('-'));
+    }
 
-    sucessoAjax(resp){
+    sucessoAjax(resposta){
         var mesGastos = '';
-        var mesTemp = 0;
-        var anoTemp = 0;
-        var totalGastosTemp = 0;  
-        var totalGanhoTemp = 0;  
+        var mesTemp = 0; var anoTemp = 0; var totalGastosTemp = 0; var totalGanhoTemp = 0;  
+        var info = new Object();
+        info.lista = resposta;
 
-        console.log('Response', resp)
+        var listaGastosAtualizada = resposta
+            .filter(conta => conta.billType === 'GASTOS' && new Date().getMonth() === this.parseDateFromAPI(conta.payday).getMonth());
+        info.listaGastos = listaGastosAtualizada;
+        
+        totalGastosTemp = listaGastosAtualizada.map(conta => conta.price).reduce((acc, price) => acc + price);
+        info.totalGastos = totalGastosTemp;
+
+        var listaGanhoAtualizada = resposta.filter(conta => conta.billType === 'GANHO' && new Date().getMonth() === this.parseDateFromAPI(conta.payday).getMonth() );
+        info.listaGanho = listaGanhoAtualizada;
+
+        totalGanhoTemp = listaGanhoAtualizada.map(conta => conta.price).reduce((acc, price) => acc + price);
+        info.totalGanho = totalGanhoTemp;
         
         var  data = new Date();
-        
-        var listaGastosAtualizada = resp.filter(function(conta){
-            var isGastos = conta.billType === 'GASTOS'
-            if(isGastos){
-                totalGastosTemp += conta.price;
-            }
-            return isGastos;
-        });
-        
-        
-        var listaGanhoAtualizada = resp.filter(function(conta){
-            var isGanho = conta.billType === 'GANHO'
-            if(isGanho){
-                totalGanhoTemp += conta.price;
-            }
-            return isGanho;
-        });
-
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        mesTemp = data.getMonth() + 1;
+        mesTemp = data.getMonth();
+        info.mes = mesTemp;
         anoTemp = data.getFullYear();
+        info.ano = anoTemp;        
         mesGastos = monthNames[data.getMonth()];
+        info.mesGastos = mesGastos;
 
-        return {
-              listaGastos: listaGastosAtualizada,
-              listaGanho: listaGanhoAtualizada,
-              totalGastos:totalGastosTemp,
-              totalGanho:totalGanhoTemp,
-              mes: mesGastos,
-              mesValor: mesTemp,
-              anoValor: anoTemp
-          };
+        return info;
+    }
+
+    filtraGastosPorTipoMesAno(conta, mes, ano){
+        return conta.billType === 'GASTOS'
+            && mes === this.parseDateFromAPI(conta.payday).getMonth()
+            && ano === this.parseDateFromAPI(conta.payday).getFullYear()
+    }
+    
+    filtraGanhoPorTipoMesAno(conta, mes, ano){
+        return conta.billType === 'GANHO'
+            && mes === this.parseDateFromAPI(conta.payday).getMonth()
+            && ano === this.parseDateFromAPI(conta.payday).getFullYear()
+    }
+
+    moverContasPorMes(mes, ano){
+
+        var listaGastosAtualizada = this.state.lista
+            .filter(conta => this.filtraGastosPorTipoMesAno.call(this, conta, mes, ano));
+
+        var totalGastosTemp = listaGastosAtualizada.map(conta => conta.price).reduce((acumulador, preco) => acumulador + preco, 0);
+
+        var listaGanhoAtualizada = this.state.lista
+            .filter(conta => this.filtraGanhoPorTipoMesAno.call(this, conta, mes, ano));
+
+        var totalGanhoTemp = listaGanhoAtualizada.map(conta => conta.price).reduce((acumulador, preco) => acumulador + preco, 0);
+
+        this.setState({ 
+            ano: ano,
+            mes: mes,
+            listaGastos: listaGastosAtualizada, 
+            totalGastos: totalGastosTemp, 
+            listaGanho: listaGanhoAtualizada, 
+            totalGanho: totalGanhoTemp 
+        });
     }
 
     getNextContasPorMes(event){
-        event.preventDefault();  
-        var isOk = false;
-        var mes = this.state.mesValor;
-        var ano = this.state.anoValor;
-        
-        mes++;
-        if(mes >= 1 && mes <= 12){
-            isOk = true;
-        }else if (mes > 12){
-            ano++;
-            mes = 1;
-            isOk = true;
+
+        var ano = this.state.ano;
+        var previous = this.state.mes;
+        if (this.state.mes === this.maxMes){
+            ano = ano + 1;
+            previous = this.minMes;
         }else{
-            isOk = false;
+            previous = previous + 1;
         }
-        
-        console.log("depois de mudar -> next mes - ano " + mes + ' - ' + ano);
-        if(isOk){
-            var paramDate = mes + '-' + ano
-           
-            const url = "http://meuorcamentoec2.com:8080/meuorcamento/api/conta/mesano/" + paramDate;
-            const req = {
-                method: 'GET',
-                headers: new Headers({ 'Content-type' : 'application/json', 'XTOKEN' : localStorage.getItem('auth-token') })
-            }
-            fetch(url, req)
-                .then(res => {
-                    if(res.ok){
-                        return  res.json();
-                    }else{
-                        throw new Error('não foi possível fazer o login');
-                    }
-                }).then(resp => {
-                    this.setState(this.sucessoAjax(resp));
-                }).catch(error => {
-                    this.setState({
-                        msg: error.message
-                    });
-                });
-                
-            }
+            
+        event.preventDefault();
+        this.moverContasPorMes(previous, ano);
     }
-        
+    
     getPrevContasPorMes(event){
-            event.preventDefault();  
-            var isOk = false;
-            var mes = this.state.mesValor;
-            var ano = this.state.anoValor;
-            
-            mes--;
-            if(mes >= 1 && mes <= 12){
-                isOk = true;
-            }else if (mes < 1){
-                ano--;
-                mes = 12;
-                isOk = true;
-            }else{
-                isOk = false;
-            }
-            
-            console.log("next mes - ano " + mes + ' - ' + ano);
-            if(isOk){
-                var paramDate = mes + '-' + ano
-                const url = "http://meuorcamentoec2.com:8080/meuorcamento/api/conta/mesano/" + paramDate;
-                const req = {
-                    method: 'GET',
-                    headers: new Headers({ 'Content-type' : 'application/json', 'XTOKEN' : localStorage.getItem('auth-token') })
-                }
-                fetch(url, req)
-                    .then(res => {
-                        if(res.ok){
-                            return  res.json();
-                        }else{
-                            throw new Error('não foi possível fazer o login');
-                        }
-                    }).then(resp => {
-                        this.setState(this.sucessoAjax(resp));
-                    }).catch(error => {
-                        this.setState({
-                            msg: error.message
-                        });
-                    });
+                
+        var ano = this.state.ano;
+        var previous = this.state.mes;
+        if (this.state.mes === this.minMes){
+            ano = ano - 1;
+            previous = this.maxMes;
+        }else{
+            previous = previous - 1;
         }
+
+        event.preventDefault();  
+        this.moverContasPorMes(previous, ano);
     }
 
     removerGastos(conta, pTodos){
@@ -284,8 +247,7 @@ class Contas extends Component{
 
 
     render(){
-        // console.log("render");
-        console.log(this.state);
+        // console.log(this.state);
 
         var total = this.state.totalGanho - this.state.totalGastos; 
         var positivoOuNegativo = total > 0 ? "positivo" : "negativo";
@@ -295,7 +257,7 @@ class Contas extends Component{
         <div>
         
             <div className="is-center">
-                <h3>Contas</h3>
+                <h3>Contas Pagas</h3>
             </div>
 
             <div className={ positivoOuNegativo + " is-center" } id="total">Saldo: R$ {total} </div>
@@ -329,7 +291,8 @@ class Contas extends Component{
                                   lista={this.state.listaGastos} 
                                   selecao={this.state.trSelecionadaGastos} 
                                   onClick={this.removerGastos.bind(this)} 
-                                  mes={this.state.mes}/>
+                                  mes={this.state.mes}
+                                  ano={this.state.ano}/>
                     </div>
                 </div>
 
@@ -358,7 +321,8 @@ class Contas extends Component{
                                   lista={this.state.listaGanho} 
                                   selecao={this.state.trSelecionadaGanho} 
                                   onClick={this.removerGanho.bind(this)}
-                                  mes={this.state.mes}/>
+                                  mes={this.state.mes}
+                                  ano={this.state.ano}/>
                     </div>
                 </div>
 
