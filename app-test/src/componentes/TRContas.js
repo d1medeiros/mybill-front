@@ -11,13 +11,12 @@ export default class TRContas extends Component{
         super();
         this.state = {trSelecionada: 0, 
                         popupRemoverMostrar: false, 
-                        contaComp: {}, 
+                        contaManipulada: {}, 
                         tipoConta: ''}
         this.selecionaConta = this.selecionaConta.bind(this);
     }
 
     componentDidMount(){
-        console.log("TRContas componentDidMount");
         this.setState({tipoConta: this.props.tipo});
     }
 
@@ -30,31 +29,26 @@ export default class TRContas extends Component{
     }
 
     clickPopup(e, conta){
-        console.log(conta)
-        this.setState({popupRemoverMostrar: true, contaComp: conta});
+        this.setState({popupRemoverMostrar: true, contaManipulada: conta});
     }
 
     popupConfirm(){
-        var obj = {conta: this.state.contaComp, tipo: this.state.tipoConta};
-        console.log(obj);
+        var obj = {conta: this.state.contaManipulada, tipo: this.state.tipoConta};
         PubSub.publish('popup.confirmar', obj);
-        this.setState({popupRemoverMostrar: false, contaComp: {}});
+        this.setState({popupRemoverMostrar: false, contaManipulada: {}});
     }
 
     popupRecusar(){
-        var obj = {conta: this.state.contaComp, tipo: this.state.tipoConta};
-        console.log(obj);
-        PubSub.publish('popup.recusar', obj);
-        this.setState({popupRemoverMostrar: false, contaComp: {}});
+        this.popupSair();
     }
 
     popupSair(){
-        this.setState({popupRemoverMostrar: false, contaComp: {}});
+        this.setState({popupRemoverMostrar: false, contaManipulada: {}});
     }
 
     render(){
         var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+        // console.log('trcontas', this.state)
         return(
                 <div>
 
