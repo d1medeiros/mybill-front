@@ -1,8 +1,12 @@
 import React,{Component} from 'react';
-import {Link} from 'react-router';
-import FaPlus from 'react-icons/lib/fa/plus';
+// import {Link} from 'react-router';
+// import FaPlus from 'react-icons/lib/fa/plus';
 import TRContas from './componentes/TRContas';
 import PubSub from 'pubsub-js';
+import ActionMenu from './componentes/ActionMenu';
+import TotalValue from './componentes/TotalValue';
+import HeaderTotal from './componentes/HeaderTotal';
+import Submenu from './componentes/Submenu';
 // import queryString from 'query-string';
 
 class Contas extends Component{
@@ -161,40 +165,18 @@ class Contas extends Component{
     render(){
         console.log(this.state);
 
-        var total = this.state.totalGanho - this.state.totalGastos; 
-        var positivoOuNegativo = total > 0 ? "positivo" : "negativo";
-
         return(
 
         <div>
         
-            <div className="is-center">
-                <h3>Contas Pagas</h3>
-            </div>
+            <Submenu nome="Contas Pagas" />
 
-            <div className={ positivoOuNegativo + " is-center" } id="total">Saldo: R$ {total} </div>
+            <HeaderTotal totalGanho={this.state.totalGanho} totalGastos={this.state.totalGastos} />
 
             <div className="content is-center">
             
                 {/* botao prev next */}
-                <div className="pure-g">
-                    <div className="pure-u-1-3" id="prev-contas">
-                        <p>
-                            <button type="submit" className="pure-button" onClick={this.getPrevContasPorMes}>Prev</button>
-                        </p>
-                    </div>
-                    <div className="pure-u-1-3">
-                        <p>
-                            <Link to="/cadastro" className="pure-button" ><FaPlus/></Link>
-                        </p>
-                    </div>
-                    <div className="pure-u-1-3" id="next-contas">
-                        <p>
-                            <button type="submit" className="pure-button" onClick={this.getNextContasPorMes}>Next</button>
-                        </p>
-                    </div>
-                </div>
-
+                <ActionMenu prev={this.getPrevContasPorMes.bind(this)} next={this.getNextContasPorMes.bind(this)}/>
                 
 
                 {/* tabela gastos */}
@@ -208,24 +190,9 @@ class Contas extends Component{
                                   ano={this.state.ano}/>
                     </div>
                 </div>
-
                 
                 {/* total gastos */}
-                <div className="pure-g total">
-                    <div className="pure-u-2-24"></div>
-                    <div className="pure-u-20-24"> 
-                        <table className="pure-table pure-table-bordered margin-center">
-                            <tbody>
-                                <tr>
-                                    <td className="header-total">Total</td>
-                                    <td>R$ {this.state.totalGastos}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="pure-u-2-24"></div>
-                </div>
-
+                <TotalValue total={this.state.totalGastos} />
 
                 {/* tabela ganho */}
                 <div id="div-ganho" className="pure-g ganho">
@@ -238,24 +205,9 @@ class Contas extends Component{
                                   ano={this.state.ano}/>
                     </div>
                 </div>
-
                 
                 {/* total ganho */}
-                <div className="pure-g total">
-                    <div className="pure-u-2-24"></div>
-                    <div className="pure-u-20-24"> 
-                        <table className="pure-table pure-table-bordered margin-center">
-                        <tbody>
-                            <tr>
-                                <td className="header-total">Total</td>
-                                <td>R$ {this.state.totalGanho}</td>
-                            </tr>
-                        </tbody>
-                        </table>
-                    </div>
-                    <div className="pure-u-2-24"></div>
-                </div>
-               
+                <TotalValue total={this.state.totalGanho} />
 
             </div>
 
