@@ -11,13 +11,7 @@ class Cadastro extends Component{
     }
 
     render(){
-        var tipoConta = [
-                            { "id": 'GASTOS', "value":'Gastos'},
-                            { "id": 'GANHO', "value":'Ganho'}
-                        ];
-        tipoConta = tipoConta.map(function(c){
-            return <option key={c.id} value={c.id}>{c.value}</option>;
-        });
+
         return(
         <div>
 
@@ -27,7 +21,7 @@ class Cadastro extends Component{
 
                 <div className="pure-g">
                     <div className="l-box-lrg pure-u-1 pure-u-md-2-5">
-                       <FormContas tipos={tipoConta} acao={this.props.params.userId} rota={this.props.router}/>
+                       <FormContas acao={this.props.params.userId} rota={this.props.router}/>
                     </div>
                 </div>
            

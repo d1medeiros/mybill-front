@@ -78,7 +78,8 @@ export default class TRContas extends Component{
                                     onClick={e => this.selecionaConta(e, conta)} >
                                         <td>
                                             <div className={conta.id === this.state.trSelecionada?"show":"hide" }>
-                                                <Link  className="pure-button button-margin-3" to={'/cadastro/' + conta.id}>
+                                                {/* ainda nao foi liberada a edicao */}
+                                                <Link  className="pure-button button-margin-3" to="">
                                                     <Edit/>
                                                 </Link>
                                                 <button type="submit" className="button-error pure-button button-margin-3" onClick={e => this.clickPopup(e, conta)}>
