@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import Configuracoes from './componentes/Configuracoes';
+import Submenu from './componentes/Submenu';
 
 
 class Home extends Component{
@@ -9,9 +10,7 @@ class Home extends Component{
 
         <div>
                         
-            <div className="is-center">
-                <h3>Home</h3>
-            </div>
+            <Submenu nome="Home" />
             
             <Configuracoes />
 

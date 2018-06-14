@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import Verificar from './util/Verificar';
+import Submenu from './componentes/Submenu';
 
 
 class Classificar extends Component{
@@ -15,9 +16,7 @@ class Classificar extends Component{
         return(
         <div>
 
-            <div className="is-center">
-                <h3>Classificação</h3>
-            </div>
+            <Submenu nome="Classificação" />
 
             <div className="content">
                 <div className="pure-g">
