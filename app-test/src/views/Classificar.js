@@ -1,14 +1,10 @@
 import React,{Component} from 'react';
-import Verificar from './util/Verificar';
-import Submenu from './componentes/Submenu';
+import Submenu from '../componentes/Submenu';
 
 
 class Classificar extends Component{
 
     componentDidMount(){
-        console.log(this.props);
-
-        new Verificar().verifica();
     }
 
     render(){

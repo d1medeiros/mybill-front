@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import FormContas from './componentes/FormContas'
-import Submenu from './componentes/Submenu';
+import FormContas from '../componentes/FormContas'
+import Submenu from '../componentes/Submenu';
 
 
 class Cadastro extends Component{

@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-import Configuracoes from './componentes/Configuracoes';
-import Submenu from './componentes/Submenu';
+import Configuracoes from '../componentes/Configuracoes';
+import Submenu from '../componentes/Submenu';
 
 
 class Home extends Component{

@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
 // import {Link} from 'react-router';
 // import FaPlus from 'react-icons/lib/fa/plus';
-import TRContas from './componentes/TRContas';
+import TRContas from '../componentes/TRContas';
 import PubSub from 'pubsub-js';
-import ActionMenu from './componentes/ActionMenu';
-import TotalValue from './componentes/TotalValue';
-import HeaderTotal from './componentes/HeaderTotal';
-import Submenu from './componentes/Submenu';
+import ActionMenu from '../componentes/ActionMenu';
+import TotalValue from '../componentes/TotalValue';
+import HeaderTotal from '../componentes/HeaderTotal';
+import Submenu from '../componentes/Submenu';
 // import queryString from 'query-string';
 
 class Contas extends Component{

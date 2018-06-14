@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Cadastro from './Cadastro';
-import Contas from './Contas';
-import Home from './Home';
+import Cadastro from './views/Cadastro';
+import Contas from './views/Contas';
+import Home from './views/Home';
 import App from './App';
 import Login from './Login';
 import Logout from './Logout';
-import Classificar from './Classificar';
+import Classificar from './views/Classificar';
 import {Router,Route,browserHistory,IndexRoute} from 'react-router';
 import './index.css';
 
