@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Cadastro from './views/Cadastro';
-import Contas from './views/Contas';
+import Pagas from './views/Pagas';
 import Home from './views/Home';
 import App from './App';
 import Login from './Login';
@@ -9,6 +9,8 @@ import Logout from './Logout';
 import Classificar from './views/Classificar';
 import {Router,Route,browserHistory,IndexRoute} from 'react-router';
 import './index.css';
+import ContasBox from './views/Contas';
+import Agendamentos from './views/Agendamentos';
 
 function verificaAutenticacao(nextState,replace) {
 	if(localStorage.getItem('auth-token') === null){
@@ -23,7 +25,9 @@ ReactDOM.render(
   		<IndexRoute component={Home}/>
 	  	<Route path="/cadastro" component={Cadastro}/>
 	  	<Route path="/cadastro/:userId" component={Cadastro}/>
-	  	<Route path="/contas" component={Contas}/>
+	  	<Route path="/pagas" component={Pagas}/>
+	  	<Route path="/agendamentos" component={Agendamentos}/>
+	  	<Route path="/contas" component={ContasBox}/>
 	  	<Route path="/classificacao" component={Classificar}/>
   	</Route>
   	<Route path="/logout" component={Logout}/>

@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import TRContas from '../componentes/Table';
+import TableModelPagas from '../componentes/Table';
 import PubSub from 'pubsub-js';
 import ActionMenu from '../componentes/ActionMenu';
 import TotalValue from '../componentes/TotalValue';
@@ -7,8 +7,7 @@ import HeaderTotal from '../componentes/HeaderTotal';
 import Submenu from '../componentes/Submenu';
 
 
-
-export class Contas extends Component{
+export default class Pagas extends Component{
 
     constructor(){
         super();
@@ -29,8 +28,27 @@ export class Contas extends Component{
         this.getPrevContasPorMes = this.getPrevContasPorMes.bind(this);
         this.maxMes = 11;
         this.minMes = 0;
-        this.url = 'http://localhost:8080/';
-        this.agendamento = false;
+        this.url = 'http://localhost:8080/paid';
+    }
+    
+    componentDidMount(){  
+        
+        console.log("didMount", this.props);
+        
+        this.getContas();
+        
+        PubSub.subscribe('atualiza',function(topico,index){
+            var novaLista = this.state.lista.filter(x => x.id !== index);
+            this.setState(this.prepareComponent(novaLista));
+        }.bind(this));
+        
+        PubSub.subscribe('popup.confirmar',function(topico,obj){
+            var conta = obj.conta;
+            this.removerConta(conta, true);
+            
+        }.bind(this));
+        
+
     }
 
     getContas(){
@@ -45,10 +63,7 @@ export class Contas extends Component{
                     throw new Error('não foi possível fazer o login');
                 }
             }).then(resp => {
-                if (this.agendamento)
-                    this.setState(this.prepareComponentAgendadas(resp));
-                else
-                    this.setState(this.prepareComponentPagas(resp));
+                this.setState(this.prepareComponent(resp));
             }).catch(error => {
                 this.setState({
                     mensagem: error.message
@@ -56,49 +71,11 @@ export class Contas extends Component{
             });
     }
 
-    componentDidMount(){  
-
-        console.log("didMount", this.props);
-        
-        this.url += this.props.rota;
-        this.getContas();
-
-        PubSub.subscribe('atualiza',function(topico,index){
-            var novaLista = this.state.lista.filter(x => x.id !== index);
-            this.setState(this.prepareComponent(novaLista));
-        }.bind(this));
-
-        PubSub.subscribe('popup.confirmar',function(topico,obj){
-            var conta = obj.conta;
-            this.removerConta(conta, true);
-            
-        }.bind(this));
-
-
-    }
-
     parseDateFromAPI(date){
         return new Date(date.split('-'));
     }
 
-    prepareComponentAgendadas(listaCompras){
-        var info = {};
-        info.lista = listaCompras;
-
-        info.listaGastos = listaCompras
-            .filter(conta => conta.billType === 'GASTOS');
-        
-        info.totalGastos = info.listaGastos.length ? info.listaGastos.map(conta => conta.price).reduce((acc, price) => acc + price) : 0.0;
-
-        info.listaGanho = listaCompras
-            .filter(conta => conta => conta.billType === 'GANHO');
-
-        info.totalGanho = info.listaGanho.length ? info.listaGanho.map(conta => conta.price).reduce((acc, price) => acc + price) : 0.0;
-
-        return info;
-    }
-
-    prepareComponentPagas(listaCompras, mesEscolhido, anoEscolhido){
+    prepareComponent(listaCompras, mesEscolhido, anoEscolhido){
         var info = {};
         info.lista = listaCompras;
 
@@ -193,13 +170,13 @@ export class Contas extends Component{
             <div className="content is-center">
             
                 {/* botao prev next */}
-                <ActionMenu prev={this.getPrevContasPorMes.bind(this)} next={this.getNextContasPorMes.bind(this)}/>
+                <ActionMenu rota="/cadastro" prev={this.getPrevContasPorMes.bind(this)} next={this.getNextContasPorMes.bind(this)}/>
                 
 
                 {/* tabela gastos */}
                 <div id="div-gastos" className="pure-g gastos">
                     <div className="pure-u-5-5">
-                        <TRContas tipo="GASTOS"
+                        <TableModelPagas tipo="GASTOS"
                                   lista={this.state.listaGastos} 
                                   selecao={this.state.trSelecionadaGastos} 
                                   onClick={this.removerConta.bind(this)} 
@@ -215,7 +192,7 @@ export class Contas extends Component{
                 {/* tabela ganho */}
                 <div id="div-ganho" className="pure-g ganho">
                     <div className="pure-u-5-5">
-                        <TRContas tipo="GANHO"
+                        <TableModelPagas tipo="GANHO"
                                   lista={this.state.listaGanho} 
                                   selecao={this.state.trSelecionadaGanho} 
                                   onClick={this.removerConta.bind(this)}
@@ -236,15 +213,3 @@ export class Contas extends Component{
 
 }
 
-
-export default class ContasBox extends Component{
-
-    render(){
-        return(
-            <div>
-                <Contas rota='paid' agendamento={false}/>
-            </div>
-        );
-    };
-
-}

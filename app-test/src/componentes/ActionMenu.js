@@ -8,8 +8,8 @@ export default class ActionMenu extends Component{
         return(
             <div>
 
-                    {/* botao prev next */}
-                    <div className="pure-g">
+                {/* botao prev next */}
+                <div className="pure-g">
                     <div className="pure-u-1-3" id="prev-contas">
                         <p>
                             <button type="submit" className="pure-button" onClick={this.props.prev}>Prev</button>
@@ -17,7 +17,7 @@ export default class ActionMenu extends Component{
                     </div>
                     <div className="pure-u-1-3">
                         <p>
-                            <Link to="/cadastro" className="pure-button" ><FaPlus/></Link>
+                            <Link to={this.props.rota} className="pure-button" ><FaPlus/></Link>
                         </p>
                     </div>
                     <div className="pure-u-1-3" id="next-contas">
@@ -25,7 +25,7 @@ export default class ActionMenu extends Component{
                             <button type="submit" className="pure-button" onClick={this.props.next}>Next</button>
                         </p>
                     </div>
-                    </div>
+                </div>
 
 
             </div>

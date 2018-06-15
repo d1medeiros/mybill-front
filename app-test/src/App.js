@@ -8,7 +8,7 @@ class App extends Component {
 
     
     render() {
-        var stiloLogout = {paddingLeft: '100px'};  
+        var stiloLogout = {paddingLeft: '80px'};  
         return (
 
             <div>
@@ -18,7 +18,8 @@ class App extends Component {
                         <a className="pure-menu-heading" href="/home">Home</a>
 
                         <ul className="pure-menu-list">
-                            <li className="pure-menu-item"><Link to="/contas" className="pure-menu-link">contas</Link></li>
+                            <li className="pure-menu-item"><Link to="/pagas" className="pure-menu-link">pagas</Link></li>
+                            <li className="pure-menu-item"><Link to="/agendamentos" className="pure-menu-link">agendamentos</Link></li>
                             <li className="pure-menu-item" style={stiloLogout}><Link to="/logout" className="pure-menu-link">logout</Link></li>
                         </ul>
                     </div>

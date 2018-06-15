@@ -43,6 +43,10 @@ label {
     box-shadow: 0 0 0 1px rgba(0,0,0,.15) inset, 0 0 6px rgba(0,0,0,.2) inset;
 }
 
+.show {
+    display: flex;
+}
+
 .hide{
     display: none;
 }
@@ -98,6 +102,11 @@ label {
     padding: 8px;
     color: rgb(255, 255, 255);
     background-color: #1f8dd6;
+}
+
+.table-contas {
+    display: inline-table;
+    min-width: 354px;
 }
 
 .total{
@@ -242,6 +251,8 @@ a.pure-button-primary {
     border: none;
     color: #AECFE5;
 }
+
+
 
 
 /*
