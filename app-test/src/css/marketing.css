@@ -200,6 +200,10 @@ a.pure-button-primary {
     background: rgb(28, 184, 65); /* this is a green */
 }
 
+.button-disable {
+    background: rgb(86, 88, 86); /* this is a green */
+}
+
 .button-error {
     background: rgb(202, 60, 60); /* this is a maroon */
 }
